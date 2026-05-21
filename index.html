@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Película de Mi Vida — Parche de Liderazgo 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&family=Anton&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1ABCB0;
+    --teal-dark: #0e9990;
+    --teal-light: #e0f7f6;
+    --cream: #FFF8EE;
+    --dark: #0d1b1e;
+    --red: #E8341A;
+    --gold: #F5C842;
+    --white: #ffffff;
+    --gray: #8a9ba8;
+    --film-bg: #111;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--teal);
+    padding: 18px 24px 14px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px; right: -40px; bottom: -40px;
+    background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(0,0,0,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .header-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 4px;
+  }
+  .header-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5vw, 52px);
+    color: var(--white);
+    letter-spacing: 3px;
+    line-height: 1;
+  }
+  .header-title span {
+    color: var(--gold);
+  }
+  .header-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    margin-top: 4px;
+  }
+  .film-strip-bar {
+    height: 18px;
+    background: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow: hidden;
+  }
+  .film-hole {
+    width: 12px; height: 10px;
+    background: var(--cream);
+    border-radius: 2px;
+    margin: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* STEPS */
+  .step { display: none; }
+  .step.active { display: block; }
+
+  /* STEP 1 — GALLERY */
+  .step1-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 28px 20px 40px;
+  }
+  .intro-box {
+    background: var(--white);
+    border-left: 5px solid var(--teal);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .intro-box h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--dark);
+    margin-bottom: 10px;
+  }
+  .intro-box p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: #3a4a52;
+  }
+  .intro-box em {
+    color: var(--teal-dark);
+    font-style: normal;
+    font-weight: 500;
+  }
+  .counter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .counter-text {
+    font-size: 13px;
+    color: var(--gray);
+    font-weight: 500;
+  }
+  .counter-dots {
+    display: flex;
+    gap: 8px;
+  }
+  .dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--teal);
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--teal);
+    transition: all 0.3s;
+  }
+  .dot.filled {
+    background: var(--teal);
+    color: white;
+  }
+
+  /* GRID */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .gallery-item {
+    position: relative;
+    aspect-ratio: 16/10;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+  .gallery-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    z-index: 2;
+  }
+  .gallery-item.selected {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 4px rgba(26,188,176,0.3);
+  }
+  .gallery-item.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    background: #222;
+  }
+  .img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.25s;
+    display: flex;
+    align-items: flex-end;
+    padding: 10px;
+  }
+  .gallery-item:hover .img-overlay { opacity: 1; }
+  .img-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    color: white;
+    letter-spacing: 1px;
+    line-height: 1.1;
+  }
+  .select-badge {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 26px; height: 26px;
+    background: var(--teal);
+    border-radius: 50%;
+    display: none;
+    align-items: center; justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .gallery-item.selected .select-badge { display: flex; }
+
+  .btn-next {
+    display: block;
+    margin: 28px auto 0;
+    padding: 14px 48px;
+    background: var(--teal);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .btn-next.ready {
+    opacity: 1;
+    pointer-events: all;
+    animation: pulse-btn 1.5s ease-in-out infinite;
+  }
+  .btn-next:hover { background: var(--teal-dark); transform: translateY(-2px); }
+
+  @keyframes pulse-btn {
+    0%, 100% { box-shadow: 0 4px 20px rgba(26,188,176,0.3); }
+    50% { box-shadow: 0 4px 32px rgba(26,188,176,0.6); }
+  }
+
+  /* STEP 2 — SUBTITLES */
+  .step2-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 20px 48px;
+  }
+  .step2-intro {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .step2-intro h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--dark);
+  }
+  .step2-intro p {
+    font-size: 14px;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  .subtitle-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .subtitle-card {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+    background: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .subtitle-card-img {
+    position: relative;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+  }
+  .subtitle-card-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .subtitle-card-img .card-film-title {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 4px 8px;
+  }
+  .subtitle-card-text {
+    padding: 16px 20px 16px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
+  .subtitle-card-text label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+  }
+  .subtitle-card-text textarea {
+    width: 100%;
+    border: 2px solid #e0e8ea;
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--dark);
+    resize: none;
+    height: 72px;
+    transition: border-color 0.2s;
+    line-height: 1.5;
+  }
+  .subtitle-card-text textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+  }
+  .subtitle-card-text textarea::placeholder {
+    color: #aab8be;
+    font-style: italic;
+    font-size: 13px;
+  }
+  .examples-hint {
+    font-size: 11.5px;
+    color: var(--gray);
+    font-style: italic;
+  }
+
+  /* Title field */
+  .title-field-wrap {
+    background: var(--dark);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .title-field-wrap label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .title-field-wrap input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    padding: 4px 0;
+    transition: border-color 0.2s;
+  }
+  .title-field-wrap input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .title-field-wrap input::placeholder {
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+  }
+
+  .btn-roll {
+    display: block;
+    margin: 28px auto 0;
+    padding: 16px 52px;
+    background: var(--red);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 3px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 4px 20px rgba(232,52,26,0.35);
+  }
+  .btn-roll:hover { background: #c8280f; transform: translateY(-2px); }
+
+  /* STEP 3 — SLIDESHOW */
+  .step3-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+    text-align: center;
+  }
+  .movie-title-display {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 4vw, 38px);
+    font-style: italic;
+    color: var(--dark);
+    margin-bottom: 8px;
+    min-height: 48px;
+  }
+  .movie-title-display span {
+    color: var(--teal-dark);
+  }
+  .directed-by {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 28px;
+  }
+
+  /* Slideshow */
+  .slideshow-wrap {
+    position: relative;
+    background: var(--film-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.35);
+    aspect-ratio: 16/9;
+    max-height: 480px;
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .slide.active { opacity: 1; }
+  .slide img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.2) 0%,
+      transparent 25%,
+      transparent 50%,
+      rgba(0,0,0,0.75) 100%
+    );
+  }
+  .slide-number {
+    position: absolute;
+    top: 14px; left: 18px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.6);
+  }
+  .slide-subtitle {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 20px 24px 22px;
+    text-align: center;
+  }
+  .slide-subtitle-text {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(18px, 3.5vw, 32px);
+    color: white;
+    text-shadow:
+      2px 2px 0 #000,
+      -2px -2px 0 #000,
+      2px -2px 0 #000,
+      -2px 2px 0 #000,
+      0 3px 8px rgba(0,0,0,0.8);
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .slide-film-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 6px;
+  }
+
+  /* Progress dots */
+  .slide-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .slide-dot {
+    width: 32px; height: 4px;
+    background: #ccc;
+    border-radius: 2px;
+    transition: background 0.3s;
+  }
+  .slide-dot.active { background: var(--teal); }
+
+  /* Film strip output */
+  .filmstrip-section {
+    margin-top: 32px;
+  }
+  .filmstrip-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 12px;
+  }
+  .filmstrip-preview {
+    display: flex;
+    background: var(--dark);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+  }
+  .filmstrip-frame {
+    flex: 1;
+    position: relative;
+    border-right: 3px solid var(--dark);
+  }
+  .filmstrip-frame:last-child { border-right: none; }
+  .filmstrip-frame img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.7);
+  }
+  .filmstrip-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.82);
+    padding: 6px 8px;
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(8px, 1.5vw, 13px);
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 0 #000;
+    line-height: 1.2;
+  }
+  .filmstrip-title-bar {
+    background: var(--dark);
+    padding: 8px 16px;
+    text-align: center;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 80px;
+  }
+
+  /* Canvas (hidden) */
+  #downloadCanvas { display: none; }
+
+  .btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 13px 36px;
+    background: var(--dark);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-download:hover { background: #1e3038; }
+  .btn-download svg { flex-shrink: 0; }
+
+  .btn-restart {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    margin-left: 12px;
+    padding: 13px 28px;
+    background: transparent;
+    color: var(--gray);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-restart:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* Loading overlay */
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,27,30,0.88);
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  .loading-overlay.show { display: flex; }
+  .loading-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: white;
+    animation: flicker 1.5s infinite;
+  }
+  .loading-reel {
+    font-size: 48px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .subtitle-card { grid-template-columns: 1fr; }
+    .subtitle-card-img { aspect-ratio: 16/7; }
+  }
+  @media (max-width: 480px) {
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-tag">Parche de Liderazgo · 2026</div>
+  <div class="header-title">¡Liderar es una <span>Película!</span></div>
+  <div class="header-sub">Seguimos rodando, ahora con otra mirada</div>
+</header>
+<div class="film-strip-bar">
+  <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+  <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+  <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+  <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+  <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+  <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+  <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+  <div class="film-hole"></div><div class="film-hole"></div><div class="film-hole"></div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-reel">🎞️</div>
+  <div class="loading-text">Rodando tu película...</div>
+</div>
+
+<!-- STEP 1: GALLERY -->
+<div class="step active" id="step1">
+  <div class="step1-inner">
+    <div class="intro-box">
+      <h2>El cine guarda tus historias</h2>
+      <p>
+        Hay escenas que no olvidamos. Un personaje que decide cuando todos dudan, 
+        alguien que sigue cuando todo se derrumba, un momento en que lo imposible 
+        deja de serlo. El cine lleva décadas contando esas historias — y sin querer, 
+        también ha ido contando las nuestras.<br><br>
+        Piensa en <em>una decisión difícil que tomaste sola o solo</em>, en ese proyecto 
+        que nadie creía viable hasta que funcionó, en la vez que dijiste algo que nadie 
+        quería escuchar pero que cambió el rumbo. Piensa en el momento en que te perdiste 
+        para encontrarte, en la alianza improbable que lo cambió todo, en el caos del que 
+        saliste distinto.<br><br>
+        <em>Elige las 3 imágenes que más resuenan con algo que has vivido.</em> 
+        No hace falta que hayas visto la película. Solo que la escena diga algo de ti.
+      </p>
+    </div>
+
+    <div class="counter-bar">
+      <div class="counter-text">Seleccionadas: <strong id="countNum">0</strong> de 3</div>
+      <div class="counter-dots">
+        <div class="dot" id="dot1">1</div>
+        <div class="dot" id="dot2">2</div>
+        <div class="dot" id="dot3">3</div>
+      </div>
+    </div>
+
+    <div class="gallery-grid" id="galleryGrid"></div>
+
+    <button class="btn-next" id="btnNext" onclick="goToStep2()">
+      SIGUIENTE →
+    </button>
+  </div>
+</div>
+
+<!-- STEP 2: SUBTITLES -->
+<div class="step" id="step2">
+  <div class="step2-inner">
+    <div class="step2-intro">
+      <h2>ESCRIBE TU GUION</h2>
+      <p>Ponle subtítulo a cada escena. La frase que va con tu historia.</p>
+    </div>
+
+    <div class="subtitle-cards" id="subtitleCards"></div>
+
+    <div class="title-field-wrap">
+      <label>TÍTULO DE TU PELÍCULA</label>
+      <input type="text" id="movieTitle" placeholder="Ej: Sin red de seguridad, La reunión del martes, El año que todo cambió..." maxlength="60">
+    </div>
+
+    <button class="btn-roll" onclick="goToStep3()">
+      🎬 RODAR LA PELÍCULA DE MI VIDA
+    </button>
+  </div>
+</div>
+
+<!-- STEP 3: RESULT -->
+<div class="step" id="step3">
+  <div class="step3-inner">
+    <div class="movie-title-display" id="displayTitle">
+      <span id="titleText"></span>
+    </div>
+    <div class="directed-by">Una historia real · Dirigida por ti</div>
+
+    <!-- Slideshow -->
+    <div class="slideshow-wrap" id="slideshowWrap"></div>
+    <div class="slide-dots" id="slideDots"></div>
+
+    <!-- Filmstrip preview -->
+    <div class="filmstrip-section">
+      <div class="filmstrip-label">Tu tira de película</div>
+      <div class="filmstrip-preview" id="filmstripPreview"></div>
+    </div>
+
+    <canvas id="downloadCanvas"></canvas>
+
+    <div style="margin-top:24px;">
+      <button class="btn-download" id="btnDownload" onclick="downloadFilmstrip()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        DESCARGAR MI PELÍCULA
+      </button>
+      <button class="btn-restart" onclick="restart()">↩ VOLVER A EMPEZAR</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const IMAGES = [
+  { id: 1,  title: "E.T. El Extraterrestre",    url: "img/01_et.png" },
+  { id: 2,  title: "Náufrago",                  url: "img/02_naufrago.png" },
+  { id: 3,  title: "El Rey León",               url: "img/03_rey_leon.png" },
+  { id: 4,  title: "Hombres de Negro",          url: "img/04_hombres_negro.png" },
+  { id: 5,  title: "El Diablo Viste a la Moda", url: "img/05_diablo_moda.png" },
+  { id: 6,  title: "El Resplandor",             url: "img/06_resplandor.png" },
+  { id: 7,  title: "Interstellar",              url: "img/07_interstellar.png" },
+  { id: 8,  title: "Parásito",                  url: "img/08_parasito.png" },
+  { id: 9,  title: "Coco",                      url: "img/09_coco.png" },
+  { id: 10, title: "Forrest Gump",              url: "img/10_forrest_gump.png" },
+  { id: 11, title: "El Mago de Oz",             url: "img/11_mago_oz.png" },
+  { id: 12, title: "Titanic",                   url: "img/12_titanic.png" },
+  { id: 13, title: "Cantando Bajo la Lluvia",   url: "img/13_cantando_lluvia.png" },
+  { id: 14, title: "Alien",                     url: "img/14_alien.png" },
+  { id: 15, title: "Toy Story",                 url: "img/15_toy_story.png" },
+  { id: 16, title: "Viernes 13",                url: "img/16_viernes_13.png" },
+  { id: 17, title: "Superman",                  url: "img/17_superman.png" },
+  { id: 18, title: "Mi Primer Beso",            url: "img/18_primer_beso.png" },
+  { id: 19, title: "Harry Potter",              url: "img/19_harry_potter.png" },
+  { id: 20, title: "Viaje a la Luna",           url: "img/20_viaje_luna.png" }
+];
+
+const PLACEHOLDER_EXAMPLES = [
+  [
+    "Cuando dije 'sí' sin saber cómo lo haría.",
+    "El cliente que nadie quería atender. Ese fui yo.",
+    "Reunión de presupuesto, año 3. Seguíamos de pie."
+  ],
+  [
+    "El día que presenté el plan y nadie aplaudió. Igual lo hice.",
+    "Solo contra el informe. A las 11 PM. Otra vez.",
+    "Le dijimos que no era posible. Tres meses después, era posible."
+  ],
+  [
+    "Mi jefe cuando le propuse cambiar el proceso.",
+    "Cuando la estrategia brillante duró exactamente un lunes.",
+    "El equipo antes de la gran presentación. Éramos cinco y un sueño."
+  ]
+];
+
+const EXAMPLES_SET = PLACEHOLDER_EXAMPLES[Math.floor(Math.random() * PLACEHOLDER_EXAMPLES.length)];
+
+let selected = [];
+let slideIndex = 0;
+let slideTimer = null;
+let loadedImages = {};
+
+// Build gallery
+function buildGallery() {
+  const grid = document.getElementById('galleryGrid');
+  IMAGES.forEach(img => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.dataset.id = img.id;
+    item.innerHTML = `
+      <img src="${img.url}" alt="${img.title}" loading="lazy" onerror="this.style.background='#1a2a2e';this.alt='${img.title}'">
+      <div class="img-overlay"><div class="img-title">${img.title}</div></div>
+      <div class="select-badge">✓</div>
+    `;
+    item.addEventListener('click', () => toggleSelect(img.id));
+    grid.appendChild(item);
+  });
+}
+
+function toggleSelect(id) {
+  const item = document.querySelector(`.gallery-item[data-id="${id}"]`);
+  if (selected.includes(id)) {
+    selected = selected.filter(s => s !== id);
+    item.classList.remove('selected');
+  } else {
+    if (selected.length >= 3) return;
+    selected.push(id);
+    item.classList.add('selected');
+  }
+  updateCounter();
+  updateDisabled();
+}
+
+function updateCounter() {
+  document.getElementById('countNum').textContent = selected.length;
+  [1,2,3].forEach(i => {
+    const dot = document.getElementById(`dot${i}`);
+    dot.classList.toggle('filled', i <= selected.length);
+  });
+  const btn = document.getElementById('btnNext');
+  btn.classList.toggle('ready', selected.length === 3);
+}
+
+function updateDisabled() {
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    const id = parseInt(item.dataset.id);
+    if (!selected.includes(id) && selected.length >= 3) {
+      item.classList.add('disabled');
+    } else {
+      item.classList.remove('disabled');
+    }
+  });
+}
+
+function goToStep2() {
+  if (selected.length < 3) return;
+  const cards = document.getElementById('subtitleCards');
+  cards.innerHTML = '';
+  selected.forEach((id, i) => {
+    const img = IMAGES.find(im => im.id === id);
+    const card = document.createElement('div');
+    card.className = 'subtitle-card';
+    card.innerHTML = `
+      <div class="subtitle-card-img">
+        <img src="${img.url}" alt="${img.title}">
+        <div class="card-film-title">${img.title}</div>
+      </div>
+      <div class="subtitle-card-text">
+        <label>Escena ${i+1} — Tu subtítulo</label>
+        <textarea id="sub${i}" placeholder="${EXAMPLES_SET[i]}" maxlength="120"></textarea>
+        <div class="examples-hint">Puede ser gracioso, dramático, lo que sientas. Sin filtro.</div>
+      </div>
+    `;
+    cards.appendChild(card);
+  });
+  showStep('step2');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function goToStep3() {
+  const subs = selected.map((_, i) => {
+    const ta = document.getElementById(`sub${i}`);
+    return ta ? ta.value.trim() : '';
+  });
+  const title = document.getElementById('movieTitle').value.trim() || 'La Película de Mi Vida';
+
+  // Show loading
+  document.getElementById('loadingOverlay').classList.add('show');
+
+  setTimeout(() => {
+    buildSlideshow(subs, title);
+    buildFilmstrip(subs, title);
+    document.getElementById('loadingOverlay').classList.remove('show');
+    showStep('step3');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    startSlideshow();
+  }, 1800);
+}
+
+function buildSlideshow(subs, title) {
+  document.getElementById('titleText').textContent = `"${title}"`;
+  const wrap = document.getElementById('slideshowWrap');
+  const dots = document.getElementById('slideDots');
+  wrap.innerHTML = '';
+  dots.innerHTML = '';
+
+  selected.forEach((id, i) => {
+    const img = IMAGES.find(im => im.id === id);
+    const slide = document.createElement('div');
+    slide.className = 'slide' + (i === 0 ? ' active' : '');
+    slide.innerHTML = `
+      <img src="${img.url}" alt="${img.title}">
+      <div class="slide-overlay"></div>
+      <div class="slide-number">Escena ${i+1} / ${selected.length}</div>
+      <div class="slide-subtitle">
+        <div class="slide-subtitle-text">${subs[i] || img.title}</div>
+        <div class="slide-film-label">${img.title}</div>
+      </div>
+    `;
+    wrap.appendChild(slide);
+
+    const dot = document.createElement('div');
+    dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
+    dots.appendChild(dot);
+  });
+}
+
+function startSlideshow() {
+  slideIndex = 0;
+  if (slideTimer) clearInterval(slideTimer);
+  slideTimer = setInterval(() => {
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.slide-dot');
+    slides[slideIndex].classList.remove('active');
+    dots[slideIndex].classList.remove('active');
+    slideIndex = (slideIndex + 1) % slides.length;
+    slides[slideIndex].classList.add('active');
+    dots[slideIndex].classList.add('active');
+  }, 4000);
+}
+
+function buildFilmstrip(subs, title) {
+  const strip = document.getElementById('filmstripPreview');
+  strip.innerHTML = '';
+  selected.forEach((id, i) => {
+    const img = IMAGES.find(im => im.id === id);
+    const frame = document.createElement('div');
+    frame.className = 'filmstrip-frame';
+    frame.innerHTML = `
+      <img src="${img.url}" alt="${img.title}" crossorigin="anonymous">
+      <div class="filmstrip-caption">${subs[i] || img.title}</div>
+    `;
+    strip.appendChild(frame);
+  });
+}
+
+async function downloadFilmstrip() {
+  const btn = document.getElementById('btnDownload');
+  btn.textContent = 'Preparando...';
+  btn.disabled = true;
+
+  const subs = selected.map((_, i) => {
+    const ta = document.getElementById(`sub${i}`);
+    return ta ? ta.value.trim() : '';
+  });
+  const title = document.getElementById('movieTitle').value.trim() || 'La Película de Mi Vida';
+
+  const canvas = document.getElementById('downloadCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const frameW = 480;
+  const frameH = 300;
+  const padding = 12;
+  const captionH = 72;
+  const headerH = 80;
+  const footerH = 50;
+  const totalW = frameW * 3 + padding * 4;
+  const totalH = headerH + frameH + captionH + footerH + padding * 2;
+
+  canvas.width = totalW;
+  canvas.height = totalH;
+
+  // Background
+  ctx.fillStyle = '#0d1b1e';
+  ctx.fillRect(0, 0, totalW, totalH);
+
+  // Header
+  ctx.fillStyle = '#1ABCB0';
+  ctx.fillRect(0, 0, totalW, headerH);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('PARCHE DE LIDERAZGO · 2026', totalW / 2, 22);
+  ctx.font = 'italic 28px Georgia, serif';
+  ctx.fillStyle = '#F5C842';
+  ctx.fillText(`"${title}"`, totalW / 2, 56);
+
+  // Load and draw images
+  const imgPromises = selected.map((id, i) => {
+    return new Promise(resolve => {
+      const imgData = IMAGES.find(im => im.id === id);
+      const image = new Image();
+      image.crossOrigin = 'anonymous';
+      image.onload = () => resolve({ image, index: i, sub: subs[i] || imgData.title, title: imgData.title });
+      image.onerror = () => resolve({ image: null, index: i, sub: subs[i] || imgData.title, title: imgData.title });
+      image.src = imgData.url;
+    });
+  });
+
+  const results = await Promise.all(imgPromises);
+
+  results.forEach(({ image, index, sub, title: filmTitle }) => {
+    const x = padding + index * (frameW + padding);
+    const y = headerH + padding;
+
+    // Frame border
+    ctx.fillStyle = '#F5C842';
+    ctx.fillRect(x - 2, y - 2, frameW + 4, frameH + captionH + 4);
+
+    // Draw image
+    if (image) {
+      ctx.drawImage(image, x, y, frameW, frameH);
+    } else {
+      ctx.fillStyle = '#1a2a2e';
+      ctx.fillRect(x, y, frameW, frameH);
+      ctx.fillStyle = '#aaa';
+      ctx.font = '16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(filmTitle, x + frameW / 2, y + frameH / 2);
+    }
+
+    // Dark gradient over image bottom
+    const grad = ctx.createLinearGradient(x, y + frameH - 80, x, y + frameH);
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(1, 'rgba(0,0,0,0.7)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(x, y + frameH - 80, frameW, 80);
+
+    // Caption box
+    ctx.fillStyle = '#111';
+    ctx.fillRect(x, y + frameH, frameW, captionH);
+
+    // Subtitle text (meme style)
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    const words = sub.split(' ');
+    const lines = [];
+    let line = '';
+    const maxWidth = frameW - 20;
+    ctx.font = 'bold 20px Impact, sans-serif';
+    words.forEach(word => {
+      const test = line + (line ? ' ' : '') + word;
+      if (ctx.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = test;
+      }
+    });
+    if (line) lines.push(line);
+    const lineH = 24;
+    const startY = y + frameH + (captionH - lines.length * lineH) / 2 + lineH - 4;
+    lines.forEach((l, li) => {
+      // Text shadow
+      ctx.fillStyle = '#000';
+      ctx.fillText(l, x + frameW / 2 + 1, startY + li * lineH + 1);
+      ctx.fillStyle = '#fff';
+      ctx.fillText(l, x + frameW / 2, startY + li * lineH);
+    });
+
+    // Film title small
+    ctx.fillStyle = '#888';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(filmTitle.toUpperCase(), x + frameW / 2, y + frameH + captionH - 6);
+  });
+
+  // Footer
+  ctx.fillStyle = '#1a2a2e';
+  ctx.fillRect(0, totalH - footerH, totalW, footerH);
+  ctx.fillStyle = '#1ABCB0';
+  ctx.font = '13px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('¡Liderar es una Película! · Una historia real dirigida por mí', totalW / 2, totalH - 18);
+
+  // Download
+  try {
+    const dataURL = canvas.toDataURL('image/jpeg', 0.92);
+    const a = document.createElement('a');
+    a.href = dataURL;
+    a.download = `${title.replace(/[^a-zA-Z0-9]/g, '_')}_pelicula.jpg`;
+    a.click();
+  } catch(e) {
+    alert('Las imágenes no pudieron descargarse directamente por restricciones del navegador. Intenta hacer clic derecho sobre la tira de película y guardar la imagen.');
+  }
+
+  btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> DESCARGAR MI PELÍCULA`;
+  btn.disabled = false;
+}
+
+function showStep(id) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function restart() {
+  if (slideTimer) clearInterval(slideTimer);
+  selected = [];
+  slideIndex = 0;
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    item.classList.remove('selected', 'disabled');
+  });
+  updateCounter();
+  showStep('step1');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+buildGallery();
+</script>
+</body>
+</html>
